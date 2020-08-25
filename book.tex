@@ -1,0 +1,532 @@
+\documentclass[12pt]{book}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathtools}
+% Use pdflscape for pdf viewers
+\usepackage{pdflscape}
+% Use lscape for printing as a book
+%\usepackage{lscape}
+\usepackage{etoolbox}
+\usepackage{csquotes}
+\usepackage[normalem]{ulem}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+
+\title{%
+  Tensor Calc Notes
+}
+\author{Ernest Kirstein}
+\date{\today}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{exercise}{Exercise}[chapter]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{example}{Example}[chapter]
+\newtheorem{drule}{Rule}
+
+\newtheoremstyle{ppart}{}{}{}{}{}{:}{ }{}
+\theoremstyle{ppart}
+\newtheorem{ppart}{Part}
+
+\newtheoremstyle{case}{}{}{}{}{}{:}{ }{}
+\theoremstyle{case}
+\newtheorem{case}{Case}
+
+\newcounter{solutionctr}
+\newtheoremstyle{solution}{}{}{}{}{}{:}{\newline}{
+  Exercise \refstepcounter{solutionctr}\thesolutionctr~Solution}
+\theoremstyle{solution}
+\newtheorem{solution}{Solution}
+\newcommand{\solutionsection}[1]{
+  \section{Chapter~#1 Solutions}\setcounter{solutionctr}{0}}
+
+\newenvironment{argument}{\noindent\textit{Argument.}}{\hfill$\square$}
+
+\AtBeginEnvironment{proof}{\setcounter{ppart}{0}}
+\AtBeginEnvironment{proof}{\setcounter{case}{0}}
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+\AtBeginEnvironment{alignat}{\setcounter{equation}{0}}
+
+%\DeclareMathOperator{\Dim}{Dim}
+%\newcommand{\mmult}[1]{\text{\raisebox{1ex}{$\underset{#1}{\times}$}}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{What is a Tensor}
+
+The following 3 definitions come from this \cite{youtube:tensor0} video.
+
+\begin{definition}[Tensor as Multidimensional Array]
+First, a tensor is a multidimensional array of numbers.
+A zero rank tensor is a scalar. A rank one tensor is a vector. A rank two tensor is a matrix. A rank three tensor is a 3d matrix.
+\end{definition}
+
+\begin{definition}[Tensor as Invariant]
+Second, a tensor is an object that is invariant under a change of coordiantes and has components that change in a special, predictable
+way under a change of coordinates.
+Vectors (as abstract physical objects) are invariant. Vector coordinates are not invariant.
+\end{definition}
+
+\begin{definition}[Tensor Abstractly]
+Lastly, a tensor is a collection of vectors and covectors combined together using the tensor product.
+\end{definition}
+
+\chapter{Forward and Backward Transformations}
+
+This chapter covers this \cite{youtube:tensor1} video.
+These are the rules that let us move back and forth between coordiante systems.
+
+We have two bases, the old basis, $\{\vec{e}_1, \vec{e}_2\}$, and the new basis, $\{\widetilde{\vec{e}_1}, \widetilde{\vec{e}_2}\}$.
+The forward transfomation will move us from the old basis to the new basis.
+
+\[ \widetilde{\vec{e}_1} = 2 \vec{e}_1 + 1 \vec{e}_2 \]
+\[ \widetilde{\vec{e}_2} = -\frac{1}{2} \vec{e}_1 + \frac{1}{4} \vec{e}_2 \]
+\[
+  F =
+  \begin{bmatrix}
+  2 & -\frac{1}{2} \\
+  1 & \frac{1}{4}
+  \end{bmatrix}
+\]
+
+\[ \vec{e}_1 = \frac{1}{4} \widetilde{\vec{e}_1} - 1 \widetilde{\vec{e}_2} \]
+\[ \vec{e}_2 = \frac{1}{2} \widetilde{\vec{e}_1} + 2 \widetilde{\vec{e}_2} \]
+\[
+  B =
+  \begin{bmatrix}
+  \frac{1}{4} & \frac{1}{2} \\
+  -1 & 2 
+  \end{bmatrix}
+\]
+
+Note that $FB = I$, i.e. $B = F^{-1}$
+
+I've noticed (this wasn't in the video) that if you want to convert a vector into the new coordiante system you actually
+need to multiply by the construction matrix for the new coordiante system, which the video labeld $B$.
+\[ B \vec{v} = \widetilde{\vec{v}} \]
+\[
+  \begin{bmatrix}
+  0.25 & 0.5 \\
+  -1 & 2 
+  \end{bmatrix}
+  \begin{bmatrix}
+  1 \\
+  1
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  0.75 \\
+  1
+  \end{bmatrix}
+\]
+Then since $B = F^{-1}$ so $B^{-1} = F$ and,
+\[ \vec{v} = F \widetilde{\vec{v}} \]
+
+In general,
+
+\[ \widetilde{\vec{e}_i} = \sum_{j=1}^{n} F_{ji} \vec{e}_j \]
+\[ \vec{e}_i = \sum_{j=1}^{n} B_{ji} \widetilde{\vec{e}_j} \]
+
+To prove that $B = F^{-1}$,
+
+\begin{align*}
+  \vec{e}_i &= \sum_{j=1}^{n} B_{ji} \widetilde{\vec{e}_j} \\
+  &= \sum_{j=1}^{n} B_{ji} \sum_{k=1}^{n} F_{kj} \vec{e}_k \\
+  &= \sum_{j=1}^{n} \sum_{k=1}^{n} B_{ji} F_{kj} \vec{e}_k \\
+  &= \sum_{k=1}^{n} \sum_{j=1}^{n} F_{kj} B_{ji} \vec{e}_k \\
+  &= \sum_{k=1}^{n} \delta_{ik} \vec{e}_k \\
+\end{align*}
+So,
+\begin{align*}
+F_{kj} B_{ji} &= \delta_{ik} \\
+FB &= I \\
+B &= F^{-1}
+\end{align*}
+
+\chapter{Vector Tensors}
+
+Starting from this \cite{youtube:tensor2} video...
+
+We've learned in linear algebra that vectors are lists of numbers with addition and scalar multiplication.
+But those are really just vector components.
+Saying that vectors are just lists of numbers loses the geometrical meaning behind vectors.
+
+Geometrically, a vector is just an arrow pointing in space. 
+To add physical vectors you just do tip to tail addition (put the tail of the second vector on the tip of the first and
+the sum is the vector from the tail of the first to the tip of the second.)
+Similarly, we can scale physical vectors in space by a scalar. 
+
+The problem is, not all vectors can be visualized as arrows. Only euclidian vectors can (consider the abstract
+algebra definition). A vector is just a member of a vector space, $(V,S,+,\bullet)$, a set of vector objects, $V$,
+a set of scalars, $S$, an addition operation, $+$, and a scalar multiplication operation, $\bullet$.
+
+Suppose we have some vector $\vec{v}$ in the context of the same coordinate systems of the last chapter,
+
+\[
+  F =
+  \begin{bmatrix}
+  2 & -\frac{1}{2} \\
+  1 & \frac{1}{4}
+  \end{bmatrix}
+\]
+
+\[
+  B =
+  \begin{bmatrix}
+  \frac{1}{4} & \frac{1}{2} \\
+  -1 & 2 
+  \end{bmatrix}
+\]
+
+Where,
+\[ \vec{v} = 1 \vec{e}_1 + 1.5 \vec{e}_2 \]
+\[ \vec{v} = 1 \widetilde{\vec{e}_1} + 2 \widetilde{\vec{e}_2} \]
+
+\[ \vec{v} = 
+  \begin{bmatrix}
+  1 \\
+  1.5
+  \end{bmatrix}_{\vec{e}}
+\]
+
+\[ \vec{v} = 
+  \begin{bmatrix}
+  1 \\
+  2 
+  \end{bmatrix}_{\widetilde{\vec{e}}}
+\]
+
+My observation from the last chapter was correct,
+\[ B \vec{v}_{e} = \vec{v}_{\widetilde{e}} \]
+\[ F \vec{v}_{\widetilde{e}} = \vec{v}_{e} \]
+But we must be very careful to note that $\vec{v}_{e}$ and $\vec{v}_{\widetilde{e}}$ are the vector {\em{components}}, not the vector itself, in the new basis.
+
+This is because \cite{youtube:tensor3} a transformation to the basis will effectively do the oposite to the vector from the perspective of the basis.
+Like if you walk forward, a stationary object will look like it's moving in the oposite direction from your perspective.
+Which lets us introduce a new term: vector components are contravariant.
+
+This contravariance shows up in the notion in the following way,
+\[ \vec{v} = \sum_{i=1}^n v^i \vec{e}_i = \sum_{i=1}^n \widetilde{v^i} \widetilde{\vec{e}_i} \]
+Note that the contravariant components have indicies at the top and the covariant basis components have their indices at the bottom.
+
+\chapter{Covectors}
+
+Covectors are, in one since, "row vecotrs" \cite{youtube:tensor4}. Which are fundamentally different than "column vectors".
+The reason you might think they're the same is that you've been dealing with them in an "orthonormal basis." Which is a basis
+where all the unit vectors are one unit long and orthoganal to eachother.
+
+A row vecotr can be thought of a function on a (column) vector.
+
+\[
+  \begin{bmatrix}
+  2 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  3 \\ -4
+  \end{bmatrix}
+  = 2
+\]
+
+In general,
+\[ \alpha(\vec{v}) = \sum_{i=1}^n \alpha_i v^i \]
+\[ \alpha : V \to \mathbb{R} \]
+
+This is obviously linear,
+\[ \alpha(s \vec{u} + t \vec{v}) = s \alpha(\vec{u}) + t \alpha(\vec{v}) \]
+
+Covectors can be thought of as planes that pass through the origin.
+
+\[
+  \begin{bmatrix}
+  2 & 1
+  \end{bmatrix}
+  \begin{bmatrix}
+  x \\ y
+  \end{bmatrix}
+  = 2x+y
+\]
+
+And a covector acting on a vector returns the number of units increased in height on the plane
+(output) from the tail of the vector to the tip of the vector.
+
+You can scale covectors by tilting the plane (steaper for an increse > 1, less steap for a decrese 0 to 1, flipped for a negative scaling)
+like this:
+
+\[ (s \alpha)(\vec{v}) = s \alpha(\vec{v}) \]
+
+You can add covectors by adding the planes, so
+\[ (\alpha+\beta)(\vec{v}) = \alpha(\vec{v})+\beta(\vec{v}) \]
+
+Since covectors themselves can be added and scaled, they form a vector space. This is called the Dual Space of the vetors in $V$ denoted $V^*$
+The dual space necessarily have different adding and scaling rules from the vector space, since those operators are operating on different
+types of objects.
+
+\section{Covector Components}
+
+In this section \cite{youtube:tensor5} we'll introduce two special covectors based on a basis, $\{\vec{e}_1, \vec{e}_2\}$, in $V$.
+Those covectors are $\epsilon^1$ and $\epsilon^2$, such that,
+\[ \epsilon^1(\vec{e}_1) = 1 \]
+\[ \epsilon^1(\vec{e}_2) = 0 \]
+\[ \epsilon^2(\vec{e}_1) = 0 \]
+\[ \epsilon^2(\vec{e}_2) = 1 \]
+In general,
+\[ \epsilon^i(\vec{e}_j) = \delta_{ij} \]
+Notice,
+\begin{align*}
+  \epsilon^1(\vec{v})
+  &= \epsilon^1(v^1 \vec{e}_1 + v^2 \vec{e}_2) \\
+  &= v^1 \epsilon^1(\vec{e}_1) + v^2 \epsilon^1(\vec{e}_1) \\
+  &= v^1 (1) + v^2 (0) \\
+  &= v^1
+\end{align*}
+And in general,
+\[ \epsilon^i(\vec{v}) = v^i \]
+
+These covectors form a basis for covectors in the dual space, $V^*$.
+So we can rewrite any general covector $\alpha$ as a linear combination of $\epsilon^i$.
+For example,
+\[ \alpha = \alpha_1\epsilon^1 + \alpha_2 \epsilon^2 \]
+
+We call this basis the `dual basis'.
+
+Any general covector can be written in an entirely different dual basis as well,
+
+\[ \alpha = \widetilde{\alpha_1} \widetilde{\epsilon^1} +  \widetilde{\alpha_2} \widetilde{\epsilon^2} \]
+
+In general,
+\[ \alpha_{\epsilon} F = \alpha_{\widetilde{\epsilon}} \]
+\[ \alpha_{\widetilde{\epsilon}} B = \alpha_{\epsilon} \]
+
+Remember from the last chapter that,
+
+\[ B \vec{v}_{e} = \vec{v}_{\widetilde{e}} \]
+\[ F \vec{v}_{\widetilde{e}} = \vec{v}_{e} \]
+
+And see how these differ. That's because these covectors are covariant, not contravariant like vectors.
+
+\section{Covector Transformations}
+
+The next video in the series was pretty convoluted and didnt' provide the kind of insight I was hoping for.
+So I've worked this out for myself.
+
+Remember for our change in basis for vectors we saw that,
+\[ \widetilde{\vec{e}_i} = \sum_{j=1}^{n} F_{ji} \vec{e}_j \]
+\[ \vec{e}_i = \sum_{j=1}^{n} B_{ji} \widetilde{\vec{e}_j} \]
+
+In other words, 
+\[ F \vec{e} = \widetilde{\vec{e}} \]
+\[ B \widetilde{\vec{e}} = \vec{e} \]
+
+Now note that the matrix composed of stacking the cobasis multiplied by the matrix composed of conjoining the basis vectors
+is equal to the identiy matrix:
+
+\begin{align*}
+  E \vec{E} &=
+  \begin{bmatrix}
+  - & \epsilon^1 & - \\
+  - & \vdots & - \\
+  - & \epsilon^n & -
+  \end{bmatrix}
+  \begin{bmatrix}
+  | & | & | \\
+  \vec{e}_1 & \dots  & \vec{e}_n \\
+  | & | & |
+  \end{bmatrix} \\
+  &= 
+  \begin{bmatrix}
+  \epsilon^1(\vec{e}_1) & \dots & \epsilon^1(\vec{e}_n) \\
+  \vdots & \ddots & \vdots \\
+  \epsilon^n(\vec{e}_1) & \dots & \epsilon^n(\vec{e}_n)
+  \end{bmatrix} \\
+  &= 
+  \begin{bmatrix}
+  \delta{1,1} & \dots & \delta{1,n} \\
+  \vdots & \ddots & \vdots \\
+  \delta{n,1} & \dots & \delta{n,n}
+  \end{bmatrix} \\
+  &= 
+  \begin{bmatrix}
+  1 & \dots & 0 \\
+  \vdots & \ddots & \vdots \\
+  0 & \dots & 1 
+  \end{bmatrix} \\
+  &= I_n
+\end{align*}
+
+And our other conversions can similarly be written in matrix form. From,
+
+\[ F \vec{e} = \widetilde{\vec{e}} \]
+\[ B \widetilde{\vec{e}} = \vec{e} \]
+
+We get,
+
+\[ F \vec{E} = \widetilde{\vec{E}} \]
+\[ B \widetilde{\vec{E}} = \vec{E} \]
+
+We want to find the chane of basis vector, $X$, such that,
+
+\[ E X = \widetilde{E} \]
+
+Now since, $E \vec{E} = I$, $\vec{E} = E^-1$. Similarly,
+$\widetilde{\vec{E}} = \widetilde{E}^-1$, and so,
+
+\begin{align*}
+  E X &= \widetilde{E} \\
+  \vec{E} E X &= \vec{E} \widetilde{E} \\
+  I X &= \vec{E} \widetilde{E} \\
+  X &= B \widetilde{\vec{E}} \widetilde{E} \\
+  X &= B I \\
+  X &= B
+\end{align*}
+
+So,
+
+\[ E B = \widetilde{E} \]
+
+Therefore (since $B$ and $F$ are inverses),
+
+\[ \widetilde{E} F = E\]
+
+In other words,
+
+\[ \epsilon^i B = \widetilde{\epsilon^i} \]
+\[ \widetilde{\epsilon^i} F = \epsilon^i \]
+
+Which is the oposite for change of basis for the regular vector basis.
+
+\[ F \vec{e} = \widetilde{\vec{e}} \]
+\[ B \widetilde{\vec{e}} = \vec{e} \]
+
+
+\chapter{Linear Maps}
+
+The video \cite{youtube:tensor6} defines linear maps in 3 ways,
+
+\begin{definition}[Linear Maps as Matrices]
+Linear maps are matrices, a 2d array of numbers. They transform column vectors through
+multiplication, $L(v) = M \vec{v} = \vec{v}'$ for some characteristic matrix $M$.
+This multiplication does not change the basis of a vector.
+
+For example,
+
+\[
+  M =
+  \begin{bmatrix}
+  5 & -1 \\
+  3 & 4
+  \end{bmatrix}_{\vec{e}}
+\]
+\[
+  L(\vec{e}_1) =
+  M 
+  \begin{bmatrix}
+  1 \\
+  0
+  \end{bmatrix}_{\vec{e}}
+  =
+  \begin{bmatrix}
+  5 \\
+  3
+  \end{bmatrix}_{\vec{e}}
+\]
+\[
+  L(\vec{e}_2) =
+  M 
+  \begin{bmatrix}
+  0 \\
+  1
+  \end{bmatrix}_{\vec{e}}
+  =
+  \begin{bmatrix}
+  -1 \\
+  4
+  \end{bmatrix}_{\vec{e}}
+\]
+\end{definition}
+
+\begin{definition}[Linear Maps Geometrically]
+Linear maps are spacial transformations that
+\begin{enumerate}
+  \item Keep grid lines parallel
+  \item Keep grid lines evenly spaced
+  \item Keep the origin stationary
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Linear Maps Abstractly]
+Linear maps are ones that map map vectors from one vector space to another,
+\[ L : V \to W \]
+
+Often times, the input and output spaces are the same, but in general they can
+be differnt.
+
+These maps are also linear, hence the name. That is, it satisfies these two conditions:
+
+\[ L(\vec{v} + \vec{w}) = L(\vec{v}) + L(\vec{w} \]
+\[ L(s \vec{v}) = s L(\vec{v}) \]
+\end{definition}
+
+It's interesting to see that the linearity property over a vector set necessarly means that $L$ can be expressed as a matrix.
+So, assuming $L$ is from $V$ to $V$, then in the basis $e$, if,
+
+\[ \vec{w} = L(\vec{v}) \]
+
+Then,
+
+\begin{align*}
+  \vec{w} &= L(\vec{v}) \\
+  &= L(v^1 \vec{e}_1 + v^2 \vec{e}_2) \\
+  &= v^1 L(\vec{e}_1) + v^2 L(\vec{e}_2)
+\end{align*}
+
+Then if we express the output of $L$ for the two basis vectors in terms of that basis (which we know we can do),
+\[ L(\vec{e}_1) = L^1_1 \vec{e}_1 + L^2_1 \vec{e}_2 \]
+\[ L(\vec{e}_2) = L^1_2 \vec{e}_1 + L^2_2 \vec{e}_2 \]
+
+Then, 
+\begin{align*}
+  \vec{w} 
+  &= v^1 L(\vec{e}_1) + v^2 L(\vec{e}_2) \\
+  &= v^1 (L^1_1 \vec{e}_1 + L^2_1 \vec{e}_2) + v^2 (L^1_2 \vec{e}_1 + L^2_2 \vec{e}_2) \\
+  &= (v^1 L^1_1 + v^2 L^1_2) \vec{e}_1 + (v^1 L^2_1 + v^2 L^2_2) \vec{e}_2
+\end{align*}
+
+We can rewrite $\vec{w}$ in terms of it's basis components,
+\[ w^1 = v^1 L^1_1 + v^2 L^1_2 \]
+\[ w^2 = v^1 L^2_1 + v^2 L^2_2 \]
+
+So,
+\[
+  \begin{bmatrix}
+  w^1 \\
+  w^2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  L^1_1 & L^1_2 \\
+  L^2_1 & L^2_2
+  \end{bmatrix}
+  \begin{bmatrix}
+  v^1 \\
+  v^2
+  \end{bmatrix}
+\]
+
+In general,
+\[ w^i = \sum_{j=1}^n L^i_j v^j \]
+
+\bibliography{book}
+\bibliographystyle{ieeetr}
+
+\end{document}
