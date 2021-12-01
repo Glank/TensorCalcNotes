@@ -13,9 +13,10 @@
 \usepackage[normalem]{ulem}
 \usepackage[toc,page]{appendix}
 \usepackage{hyperref}
+\usepackage{xcolor}
 
 \title{%
-  Tensor Calc Notes
+  Tensor Algebra Notes
 }
 \author{Ernest Kirstein}
 \date{\today}
@@ -135,6 +136,7 @@ Then since $B = F^{-1}$ so $B^{-1} = F$ and,
 
 In general,
 
+\label{vector_basis_transform}
 \[ \widetilde{\vec{e}_i} = \sum_{j=1}^{n} F_{ji} \vec{e}_j \]
 \[ \vec{e}_i = \sum_{j=1}^{n} B_{ji} \widetilde{\vec{e}_j} \]
 
@@ -168,8 +170,8 @@ the sum is the vector from the tail of the first to the tip of the second.)
 Similarly, we can scale physical vectors in space by a scalar. 
 
 The problem is, not all vectors can be visualized as arrows. Only euclidian vectors can (consider the abstract
-algebra definition). A vector is just a member of a vector space, $(V,S,+,\bullet)$, a set of vector objects, $V$,
-a set of scalars, $S$, an addition operation, $+$, and a scalar multiplication operation, $\bullet$.
+algebra definition). A vector is just a member of a vector space, $(V,S,+,\cdot)$, a set of vector objects, $V$,
+a set of scalars, $S$, an addition operation, $+$, and a scalar multiplication operation, $\cdot$.
 
 Suppose we have some vector $\vec{v}$ in the context of the same coordinate systems of the last chapter,
 
@@ -207,7 +209,9 @@ Where,
   \end{bmatrix}_{\widetilde{\vec{e}}}
 \]
 
+
 My observation from the last chapter was correct,
+\label{change_vector_basis}
 \[ B \vec{v}_{e} = \vec{v}_{\widetilde{e}} \]
 \[ F \vec{v}_{\widetilde{e}} = \vec{v}_{e} \]
 But we must be very careful to note that $\vec{v}_{e}$ and $\vec{v}_{\widetilde{e}}$ are the vector {\em{components}}, not the vector itself, in the new basis.
@@ -222,8 +226,8 @@ Note that the contravariant components have indicies at the top and the covarian
 
 \chapter{Covectors}
 
-Covectors are, in one since, "row vecotrs" \cite{youtube:tensor4}. Which are fundamentally different than "column vectors".
-The reason you might think they're the same is that you've been dealing with them in an "orthonormal basis." Which is a basis
+Covectors are, in one sense, ``row vectors" \cite{youtube:tensor4}. Which are fundamentally different than ``column vectors".
+The reason you might think they're the same is that you've been dealing with them in an ``orthonormal basis." Which is a basis
 where all the unit vectors are one unit long and orthoganal to eachother.
 
 A row vecotr can be thought of a function on a (column) vector.
@@ -245,7 +249,7 @@ In general,
 This is obviously linear,
 \[ \alpha(s \vec{u} + t \vec{v}) = s \alpha(\vec{u}) + t \alpha(\vec{v}) \]
 
-Covectors can be thought of as planes that pass through the origin.
+Covectors can be thought of as planes one dimension higher that pass through the origin. Such as the range of the function:
 
 \[
   \begin{bmatrix}
@@ -268,7 +272,7 @@ like this:
 You can add covectors by adding the planes, so
 \[ (\alpha+\beta)(\vec{v}) = \alpha(\vec{v})+\beta(\vec{v}) \]
 
-Since covectors themselves can be added and scaled, they form a vector space. This is called the Dual Space of the vetors in $V$ denoted $V^*$
+Since covectors themselves can be added and scaled, they form a vector space. This is called the Dual Space of the vectors in $V$ denoted $V^*$
 The dual space necessarily have different adding and scaling rules from the vector space, since those operators are operating on different
 types of objects.
 
@@ -305,6 +309,7 @@ Any general covector can be written in an entirely different dual basis as well,
 \[ \alpha = \widetilde{\alpha_1} \widetilde{\epsilon^1} +  \widetilde{\alpha_2} \widetilde{\epsilon^2} \]
 
 In general,
+\label{change_covector_basis}
 \[ \alpha_{\epsilon} F = \alpha_{\widetilde{\epsilon}} \]
 \[ \alpha_{\widetilde{\epsilon}} B = \alpha_{\epsilon} \]
 
@@ -374,12 +379,12 @@ We get,
 \[ F \vec{E} = \widetilde{\vec{E}} \]
 \[ B \widetilde{\vec{E}} = \vec{E} \]
 
-We want to find the chane of basis vector, $X$, such that,
+We want to find the change of basis vector, $X$, such that,
 
 \[ E X = \widetilde{E} \]
 
-Now since, $E \vec{E} = I$, $\vec{E} = E^-1$. Similarly,
-$\widetilde{\vec{E}} = \widetilde{E}^-1$, and so,
+Now since, $E \vec{E} = I$, $\vec{E} = E^{-1}$. Similarly,
+$\widetilde{\vec{E}} = \widetilde{E}^{-1}$, and so,
 
 \begin{align*}
   E X &= \widetilde{E} \\
@@ -400,6 +405,7 @@ Therefore (since $B$ and $F$ are inverses),
 
 In other words,
 
+\label{covector_transforms}
 \[ \epsilon^i B = \widetilde{\epsilon^i} \]
 \[ \widetilde{\epsilon^i} F = \epsilon^i \]
 
@@ -473,7 +479,7 @@ be differnt.
 
 These maps are also linear, hence the name. That is, it satisfies these two conditions:
 
-\[ L(\vec{v} + \vec{w}) = L(\vec{v}) + L(\vec{w} \]
+\[ L(\vec{v} + \vec{w}) = L(\vec{v}) + L(\vec{w}) \]
 \[ L(s \vec{v}) = s L(\vec{v}) \]
 \end{definition}
 
@@ -525,6 +531,592 @@ So,
 
 In general,
 \[ w^i = \sum_{j=1}^n L^i_j v^j \]
+
+\section{Linear Map Transformation Rules}
+
+This section covers this \cite{youtube:tensor7} video.
+
+So you have a linear map transformation, $L(\vec{v})$ which 
+has some matrix representation in the basis $e$, $L$. The question is,
+how do we find that linear transformation's matrix represetation in a new basis, $\widetilde{e}$, which
+we'll call $\widetilde{L}$.
+
+That is, we know that for any $\vec{v}$, if we let $\vec{w}$ be the output of the transform on $\vec{v}$ then,
+
+\[L \vec{v}_e = \vec{w}_e \]
+
+And we just need to solve,
+\[\widetilde{L} \vec{v}_{\widetilde{e}} = \vec{w}_{\widetilde{e}} \]
+In terms of $L$ and the forward and backward matrices.
+
+
+\begin{align*}
+  \widetilde{L} \vec{v}_{\widetilde{e}} &= \vec{w}_{\widetilde{e}} \\
+  \widetilde{L} B \vec{v}_e &= B \vec{w}_e \\
+  \widetilde{L} B \vec{v}_e &= B L \vec{v}_e \\
+  (\widetilde{L} B) \vec{v}_e &= (B L) \vec{v}_e \\
+\end{align*}
+
+So, since this is true for all $\vec{v}_e$ we know that,
+
+\[ \widetilde{L} B = B L \]
+
+So,
+
+\begin{align*}
+  \widetilde{L} B &= B L \\
+  \widetilde{L} B F &= B L F \\
+  \widetilde{L} I &= B L F \\
+  \widetilde{L} &= B L F
+\end{align*}
+
+And we can work out the inverse transform to get $L$ from $\widetilde{L}$ quite easily,
+
+\begin{align*}
+  \widetilde{L} &= B L F \\
+  F \widetilde{L} B &= F B L F B\\
+  F \widetilde{L} B &= I L I\\
+  F \widetilde{L} B &= L \\
+\end{align*}
+
+So we have are two nice neat equations,
+\label{linear_map_transforms}
+\[ \widetilde{L} = B L F \]
+\[ L = F \widetilde{L} B \]
+
+\section{Einstein Notation}
+
+Let us consider the sum,
+\[ \widetilde{L}^l_i =  \sum_{k=1}^n \sum_{j=1}^n B^l_k L^k_j F^j_i \] 
+Which is the expansion of
+\[ \widetilde{L} = B L F \]
+
+Einstein notation will have us writing that,
+\[ \widetilde{L}^l_i =  B^l_k L^k_j F^j_i \] 
+Where we can assume there are sums for indexes repeated on the top and the bottom.
+That let's us rearrange things if we want,
+\[ \widetilde{L}^l_i =  F^j_i L^k_j B^l_k \] 
+Is how it was written in the video, for example.
+
+This is also demonstrated with matrix identity multiplication,
+
+\[ (M I)^i_k = M^i_j I^j_k = M^i_j \delta^j_k = M^i_k \] 
+
+Notice how we can just drop that kronecker delta and keep replace $j$ with $k$ on $M$.
+
+All of our important results written in Einstein Notation are as follows:
+
+\label{einstein_notation}
+For Contravariant (1,0)-Tensors:
+\[ \widetilde{\epsilon}^i = B^i_j \epsilon^j \]
+\[ \epsilon^i = F^i_j \widetilde{\epsilon^j} \]
+\[ \widetilde{v}^i = B^i_j v^j \]
+\[ v^i = F^i_j \widetilde{v^j} \]
+
+For Covariant (0,1)-Tensors:
+\[ \widetilde{\vec{e}_i} = F^j_i \vec{e}_j \]
+\[ \vec{e}_i = B^j_i \widetilde{\vec{e}_j} \]
+\[ \widetilde{\alpha_i} = F^j_i \alpha_j \]
+\[ \alpha_i = B^j_i \widetilde{\alpha_j} \]
+
+And for (1,1)-Tensors:
+\[ \widetilde{L^i_j} = B^i_k L^k_l F^l_j \]
+\[ L^i_j = F^i_k \widetilde{L^k_l} B^l_j \]
+
+\chapter{The Metric Tensor}
+
+Trying to measure the length of a vector is not as straight forward
+as using Pythagoras' Theorem \cite{youtube:tensor8}, at least not in a non-orthonormal coordinate system.
+
+The real length can be gotten by the dot product.
+
+\[ \vec{v} \cdot \vec{v} = ||\vec{v}||^2 \]
+
+This works in all coordinate systems, so long as you know the size, in the correct units, of
+the dot products of the basis vectors in that coordinate system.
+
+Now, this can also be calculated like this for a orthonormal basis, $e$,
+
+\[ ||\vec{v}||^2 = \vec{v}^T_e I \vec{v}_e \]
+\[ ||\vec{v}||^2 = v_i \delta^i_j v^j \]
+
+And in general,
+
+\label{length}
+\[ ||\vec{v}||^2 = \vec{v}^T_{\widetilde{e}} g_{\widetilde{e}} \vec{v}_{\widetilde{e}} \]
+\[ ||\vec{v}||^2 = \widetilde{v^i} \widetilde{v^j} \widetilde{g_{ij}} \]
+
+Where $g_{\widetilde{e}}$, or $\widetilde{g^i_j}$, is the `metric tensor' for the basis $\widetilde{e}$.
+
+In general,
+\label{metric_tensor}
+\[ g_{ij} = \vec{e}_i \cdot \vec{e}_j \]
+
+The metric tensor can also be used to measure angles.
+Remember that,
+\[ \vec{v} \cdot \vec{w} = ||\vec{v}|| ||\vec{w}||\cos(\theta) \]
+
+And since,
+
+\label{dot}
+\[ \vec{v} \cdot \vec{w} =  v^i w^j g_{ij} \]
+
+\label{angle}
+\begin{align*}
+  v^i w^j g_{ij} &= ||\vec{v}|| ||\vec{w}||\cos(\theta) \\
+  v^i w^j g_{ij} &= \sqrt{v^a v^b g_{ab}} \sqrt{w^c w^d g_{cd}} \cos(\theta) \\
+  \frac{v^i w^j g_{ij}}{\sqrt{v^a v^b g_{ab}} \sqrt{w^c w^d g_{cd}}} &=  \cos(\theta)
+\end{align*}
+
+\section{Transforming the Metric Tensor}
+
+To get one metric tensor from another, note that, 
+
+\begin{align*}
+  \widetilde{g_{ij}}
+  &= \widetilde{\vec{e}_i} \cdot \widetilde{\vec{e}_j} \\
+  &= (F^k_i\vec{e}_k) \cdot (F^l_j\vec{e}_l) \\
+  &= F^k_i F^l_j (\vec{e}_k \cdot \vec{e}_l) \\
+  &= F^k_i F^l_j g_{kl}
+\end{align*}
+
+\label{metric_tensor_transform}
+So,
+\[ \widetilde{g_{ij}} = F^k_i F^l_j g_{kl} \]
+
+Likewise,
+
+\[ g_{ij} = B^k_i B^l_j \widetilde{g_{kl}} \]
+
+The metric tensor is then said to be a (0,2)-Tensor because it transforms using
+two covariant rules.
+
+\section{Tensors In General}
+
+Tensors in general follow this pattern,
+\label{general_tensor}
+
+\[
+  \widetilde{T^{abc\dots}_{xyz\dots}}
+  =
+  (B^a_i B^b_j B^c_k \dots) 
+  T^{ijk\dots}_{rst\dots}
+  (F^r_x F^s_y F^t_z \dots) 
+\]
+
+Where the top indices are the contravariant indices
+and the bottom indices are the covariant indices.
+
+When the tensor has $m$ contravariant indices and $n$ covariant indices
+it is an $(m,n)$-tensor.
+
+And by the way, the reverse transform is,
+\[
+  T^{ijk\dots}_{rst\dots}
+  =
+  (F^i_a F^j_b F^k_c \dots) 
+  \widetilde{T^{abc\dots}_{xyz\dots}}
+  (B^x_r B^y_s B^z_t \dots) 
+\]
+
+\chapter{Bilinear Forms}
+
+The Metric Tensor is a very specific example of a more general thing called a bilinear form \cite{youtube:tensor9}.
+
+Notice that the metric tensor can be thought of as a function from two vectors to produce a scalar,
+\[ g: V \times V \to \mathbb{R} \]
+
+Specifically,
+
+\[ g(\vec{v}, \vec{w}) = v^i w^j g_{ij} \]
+
+Now note that,
+
+\[ g(\vec{v}, \vec{w}) = g(\vec{w}, \vec{v}) \]
+\[ s g(\vec{v}, \vec{w}) = g(s \vec{v}, \vec{w}) =  g(\vec{v}, s \vec{w}) \]
+\[ g(\vec{v}+\vec{u}, \vec{w}) = g(\vec{v}, \vec{w}) + g(\vec{u}, \vec{w})\]
+\[ g(\vec{v}, \vec{w}+\vec{u}) = g(\vec{v}, \vec{w}) + g(\vec{v}, \vec{u}) \]
+
+\begin{definition}[Bilinear Form]
+A bilinear form is any function, $\mathcal{B}$, from $V \times V$ to $\mathbb{R}$ that follows
+the following properties,
+\[ s \mathcal{B}(\vec{v}, \vec{w}) = \mathcal{B}(s \vec{v}, \vec{w}) =  \mathcal{B}(\vec{v}, s \vec{w}) \]
+\[ \mathcal{B}(\vec{v}+\vec{u}, \vec{w}) = \mathcal{B}(\vec{v}, \vec{w}) + \mathcal{B}(\vec{u}, \vec{w})\]
+\[ \mathcal{B}(\vec{v}, \vec{w}+\vec{u}) = \mathcal{B}(\vec{v}, \vec{w}) + \mathcal{B}(\vec{v}, \vec{u}) \]
+
+Notice that it doesn't necessarily have to follow,
+\[ \mathcal{B}(\vec{v}, \vec{w}) = \mathcal{B}(\vec{w}, \vec{v}) \]
+Though that makes the bilinear form `symmetric' \cite{wiki:bilinear}.
+\end{definition}
+
+The metric tensor also has the additional property,
+\[ g(\vec{v}, \vec{v}) \ge 0 \]
+
+Bilinear forms are represented by general matrices, lik so,
+\[ \mathcal{B}(\vec{v}, \vec{w}) = \mathcal{B}_{ij} v^i w^j \]
+
+A bilinear form is necessarily a $(0,2)$-tensor. So,
+\[ \widetilde{\mathcal{B}_{ij}} = \mathcal{B}_{kl} F^k_i F^l_j \]
+\[ \mathcal{B}_{ij} = \widetilde{\mathcal{B}_{kl}} B^k_i B^l_j \]
+
+
+Covectors are sometimes called 1-forms because they operate on one vector and produce a scalar. Similarly,
+bilinear forms are called 2-forms because they act on two vectors and produce a scalar.
+
+\chapter{Tensor Product}
+
+This chapter will build towards a definition of the tensor product.
+
+\section{Linear Maps and Vector-Covetor Pairs}
+
+Remember that our last definition of a tensor was ``a collection of vectors and covectors combined together
+using a tensor product.'' \cite{youtube:tensor10}
+
+That tells us that we should be able to build linear maps and metric tensors out of vectors and covectors
+somehow.
+
+If you have a vector and a covector, remember that these are column and rew vectors respectively,
+and that in one ordering their product is a scalar, while in the other it forms an $n \times n$ matrix.
+But not all matrices can be decomposed this way.
+
+Notice that the set of products from the basis, $\{\vec{e}_i\}$, and cobasis $\{\epsilon^j\}$ forms a basis for a vector space of $n \times n$ matrices.
+
+\[ \{ \vec{e}_i \epsilon^j \} \text{ is a basis for } L \]
+
+Where $L$ is a general linear map.
+
+\begin{align*}
+  \vec{w} = L(\vec{v})
+  &= L^i_j \vec{e}_i \epsilon^j (v^k \vec{e}_k) \\
+  &= L^i_j v^k \vec{e}_i \epsilon^j (\vec{e}_k) \\
+  &= L^i_j v^k \vec{e}_i \delta^j_k \\
+  &= L^i_j v^j \vec{e}_i \\
+  w^i &= L^i_j v^j
+\end{align*}
+
+Notice that there's nothing special about this particular basis. Any product of basis and cobasis will form a basis for $L$. 
+
+\section{Bilinear Forms and Covector-Covector Pairs}
+
+Now that we've redefined linear maps as vector-covector pairs, we can also redefine bilinear forms simimlarly through
+products of the cobasis with itself,
+
+\[ \mathcal{B} = \mathcal{B}_{ij} \epsilon^i \epsilon^j \]
+
+Notice that bilinear forms take 2 vector inputs. The covectors of the cobasis take one vector each.
+
+\begin{align*}
+  s &= \mathcal{B}(\vec{v}, \vec{w}) \\
+  &= \mathcal{B}_{ij} \epsilon^i \epsilon^j (v^k \vec{e}_k, w^l \vec{e}_l) \\
+  &= \mathcal{B}_{ij} \epsilon^i (v^k \vec{e}_k) \epsilon^j (w^l \vec{e}_l) \\
+  &= \mathcal{B}_{ij} v^k w^l \epsilon^i (\vec{e}_k) \epsilon^j (\vec{e}_l) \\
+  &= \mathcal{B}_{ij} v^k w^l \delta^i_k \delta^j_l \\
+  &= \mathcal{B}_{ij} v^i w^j 
+\end{align*}
+
+So $\{\epsilon^i \epsilon^j\}$ is a basis for $\mathcal{B}$.
+
+\section{Tensor Product vs. Kronecker Product}
+
+This section coverse this \cite{youtube:tensor11} video.
+
+Technically, I should have been writing,
+
+\[ \epsilon^i \epsilon^j \]
+as
+\[ \epsilon^i \otimes \epsilon^j \]
+
+And similar for other tensor products. But this video series uses non-standard notation by
+excluding the $\otimes$.
+
+The $\otimes$ actually represents two different operations. The tesor product, and the kronecker product.
+The tensor product operates on tensors while the kronecker product operates on arrays.
+
+Let the basis for $V$ be $\vec{e}_i \in V$ and the cobasis be $\epsilon^i \in V*$ where
+\[ \epsilon^i(\vec{e}_j) = \delta^i_j \]
+
+Now $\vec{e}_i \otimes \epsilon^j$ is a new tensor, a linear map, as we've learned.
+Thus, the tensor product.
+
+The kronecker product works on arrays,
+
+\[
+  \begin{bmatrix}
+  v^1 \\
+  v^2
+  \end{bmatrix}
+  \otimes
+  \begin{bmatrix}
+  a_1 & a_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \begin{bmatrix}
+    v^1 \\
+    v^2
+    \end{bmatrix}
+    a_1 
+  & 
+    \begin{bmatrix}
+    v^1 \\
+    v^2
+    \end{bmatrix}
+    a_2
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \begin{bmatrix}
+    v^1 a_1 \\
+    v^2 a_1 
+    \end{bmatrix}
+  & 
+    \begin{bmatrix}
+    v^1 a_2 \\
+    v^2 a_2 
+    \end{bmatrix}
+  \end{bmatrix}
+\]
+
+You just distribute the array on the left into the array on the right.
+
+\section{Generalizing Tensors}
+
+This section covers this \cite{youtube:tensor12} video.
+
+Let's define some new tensors,
+
+\[ D = D^{ab} \vec{e}_a \vec{e}_b \]
+\[ Q = Q^i_{jk} \vec{e}_i \epsilon^j \epsilon^k \]
+
+Where $D$ is a (2,0) tensor and $Q$ is a (1,2) tensor.
+So what are the forward and backwards transformation rules for these tensors?
+That's easy enough to work out if you remember that,
+
+\[ \widetilde{\vec{e}_j} = F^i_j \vec{e}_i \]
+\[ \vec{e}_j = B^i_j \widetilde{\vec{e}_i} \]
+\[ \widetilde{\epsilon^j} = \epsilon^i B^j_i \]
+\[ \epsilon^j = \widetilde{\epsilon^i} F^j_i \]
+
+So,
+
+\begin{align*}
+  D &= D^{ab} (B^i_a \widetilde{\vec{e}_i}) (B^i_b \widetilde{\vec{e}_i}) \\
+  &= B^i_a B^i_b D^{ab} \widetilde{\vec{e}_i} \widetilde{\vec{e}_i} \\
+  &=  \widetilde{D^{ij}} \widetilde{\vec{e}_i} \widetilde{\vec{e}_i} \\
+  \widetilde{D^{ij}} &= B^i_a B^i_b D^{ab}
+\end{align*}
+
+\begin{align*}
+  Q &= Q^i_{jk} (B^a_i \widetilde{\vec{e}_a}) (\widetilde{\epsilon^b} F^j_b) (\widetilde{\epsilon^c} F^k_c) \\
+  &= B^a_i Q^i_{jk} F^j_b F^k_c \widetilde{\vec{e}_a} \widetilde{\epsilon^b} \widetilde{\epsilon^c} \\
+  &= \widetilde{Q^a_{bc}} \widetilde{\vec{e}_a} \widetilde{\epsilon^b} \widetilde{\epsilon^c} \\
+  \widetilde{Q^a_{bc}} &= B^a_i Q^i_{jk} F^j_b F^k_c
+\end{align*}
+
+Now, notice that there are many ways to combine $Q$ and $D$. Some examples are,
+
+\[ Q^i_{jk} D^{jk} \]
+\[ Q^i_{jk} D^{kj} \]
+\[ Q^i_{jk} D^{kb} \]
+\[ Q^i_{jk} D^{aj} \]
+
+Which all result in different tensor results. So $Q(D)$ would be ambiguious.
+
+\section{Tensor Product Spaces}
+
+Let ${\color{blue}T} \otimes {\color{red}S}$ be more compactly written ${\color{blue}T}{\color{red}S}$.
+
+Tensor products are distributive over addition,
+
+\[ AB + AC = A(B+C) \]
+\[ AC + BC = (A+B)C \]
+
+And in scalar multiplication is associative and commutative with respect to tensor products,
+
+\[ s(AB) = (sA)B = A(sB) \]
+
+Now if,
+
+\[ \vec{v}, \vec{w}, \vec{e_1}, \vec{e_2} \in V \]
+\[ \alpha, \beta, \epsilon^1, \epsilon^2 \in V^* \]
+
+Then,
+
+\[ \vec{v} \alpha, \vec{v} \beta, \vec{w} \alpha, \vec{w} \beta, \vec{e_1} \epsilon^2, L^i_{~j} \vec{e_i} \epsilon^j \in V \otimes V^* \]
+
+A general element of $V \otimes V^*$ might be written,
+
+\[ L^i_{~j} \vec{e_i} \epsilon^j \]
+
+And depending on how it is combined with another tensor, may act as a linear map for vectors, or as a linear map for covectors,
+or to reduce an element of $V \otimes V^*$ to the reals, or to reduce an element of $V^* \otimes V$ to the reals:
+
+\[ L^i_{~j} v^j = w^i \]
+\[ L^i_{~j} \alpha_i = \beta_j \]
+\[ L^i_{~j} v^j \alpha_i = s \]
+\[ L^i_{~j} \alpha_i v^j = s \]
+
+General notation (dropping basis and cobasis vectors) will have tensors written like this,
+
+\[ v^i \in V \]
+\[ \alpha_j \in V^* \]
+\[ \mathcal{A}^{ij} \in V \otimes V \]
+\[ L^{i}_{~j} \in V \otimes V^* \]
+\[ L^{~j}_{i} \in V^* \otimes V \]
+\[ \mathcal{B}_{ij} \in V^* \otimes V^* \]
+\[ T^{~j}_{i~~k} \in V^* \otimes V \otimes V^* \]
+
+Et cetera.
+
+Now, functions of a general tensor acting on any other tensors form what's known as a multilinear map. Which is essential just the
+teneral term for an arbitrary parameter bilinear map. All input parameters are linear,
+
+\[ T(\vec{v}, \vec{w}, \vec{x}, \dots) = T^{ijk\dots}_{abc\dots} v^{a\dots}_{i\dots} w^{b\dots}_{j\dots} x^{c\dots}_{k\dots} \]
+\[ T(s\vec{v}, \vec{w}, \vec{x}, \dots) = T(\vec{v}, s\vec{w}, \vec{x}, \dots) = T(\vec{v}, \vec{w}, s\vec{x}, \dots) = s T(\vec{v}, \vec{w}, \vec{x}, \dots) \]
+\[ T(\vec{v}+\vec{z}, \vec{w}, \vec{x}, \dots) = T(\vec{v}, \vec{w}, \vec{x}, \dots) + T(\vec{z}, \vec{w}, \vec{x}, \dots)\]
+\[ T(\vec{v}, \vec{w}+\vec{z}, \vec{x}, \dots) = T(\vec{v}, \vec{w}, \vec{x}, \dots) + T(\vec{v}, \vec{z}, \vec{x}, \dots)\]
+\[ T(\vec{v}, \vec{w}, \vec{x}+\vec{z}, \dots) = T(\vec{v}, \vec{w}, \vec{x}, \dots) + T(\vec{v}, \vec{w}, \vec{z}, \dots)\]
+
+\chapter{Rasing and Lowing Indexes}
+
+Let $\vec{v} \in V$. Then the function $f(\vec{w}) = \vec{v} \cdot \vec{w}$ is in $V^*$.
+
+Now, we can express $f$ with the metric tensor $g$,
+
+\begin{align*}
+  f(\vec{w}) &= g_{ij} \epsilon^i \epsilon^j (v^k \vec{e}_k w^l \vec{e}_l) \\
+  &= g_{ij} \epsilon^i (v^k \vec{e}_k) \epsilon^j (w^l \vec{e}_l) \\
+  &= g_{ij} v^k w^l \epsilon^i (\vec{e}_k) \epsilon^j (\vec{e}_l) \\
+  &= g_{ij} v^k w^l \delta^i_k \delta^j_l \\
+  &= g_{ij} v^i w^j \\
+\end{align*}
+
+\begin{align*}
+  f &= g_{ij} \epsilon^i \epsilon^j (v^k \vec{e}_k) \\
+  &= g_{ij} \epsilon^i (v^k \vec{e}_k) \epsilon^j \\
+  &= g_{ij} v^k \epsilon^i (\vec{e}_k) \epsilon^j \\
+  &= g_{ij} v^k \delta^i_k \delta^j_l \epsilon^j \\
+  &= g_{ij} v^i \epsilon^j \\
+\end{align*}
+
+We denote,
+\[ g_{ij}v^j = v_i \]
+
+So a vector can be written,
+\[ \vec{v} = v^j \vec{e}_j \]
+And it's paird covector can be written,
+\[ \vec{v} \cdot \_ = v_i \epsilon^i \]
+
+Note that $v^i \ne v_i$ unless we're in an orthonormal coordinate system.
+
+The 'inverse metric tensor' is defined like this,
+
+\[ \mathfrak{g}^{ki} g_{ij} = \delta^k_j \]
+
+So, it's components are literally the inverse matrix of the metric tensor's.
+
+So our index raising and lowering rules are as follows,
+
+\[ v_j = g_{ji} v^i \]
+\[ v^i = \mathfrak{g}^{ij} v_j \]
+
+This raising and lowering property applies to tensors of all shapes.
+
+Suppose you have a tensor $Q \in V \otimes V^* \otimes V^*$ then for any,
+
+\[ Q = Q^i_{~jk} \vec{e}_i \epsilon^j \epsilon^k \]
+
+We can show that,
+
+\[ Q^i_{~jk} \mathfrak{g}^{jx} = Q^{ix}_{~~k} \]
+\[ Q' = Q^{ix}_{~~k} \vec{e}_i \vec{e}_x \epsilon^k \]
+
+Where $Q' \in V \otimes V \otimes V^*$
+
+This pairing between vector and covector pairs can also be denoted using the $\flat$ and $\sharp$ symbols.
+
+\[ \vec{v} \in V \iff \flat \vec{v} \in V^* \]
+\[ \sharp \alpha \in V \iff \alpha \in V^* \]
+
+\begin{appendices}
+
+\chapter{Important Results}
+
+This section is basically just a cheat sheet of important formula.
+
+From section \ref{vector_basis_transform}:
+\[ \widetilde{\vec{e}_i} = \sum_{j=1}^{n} F_{ji} \vec{e}_j \]
+\[ \vec{e}_i = \sum_{j=1}^{n} B_{ji} \widetilde{\vec{e}_j} \]
+
+From section \ref{change_vector_basis}:
+\[ B \vec{v}_{e} = \vec{v}_{\widetilde{e}} \]
+\[ F \vec{v}_{\widetilde{e}} = \vec{v}_{e} \]
+
+From section \ref{change_covector_basis}:
+\[ \alpha_{\epsilon} F = \alpha_{\widetilde{\epsilon}} \]
+\[ \alpha_{\widetilde{\epsilon}} B = \alpha_{\epsilon} \]
+
+From section \ref{covector_transforms}:
+\[ \epsilon^i B = \widetilde{\epsilon^i} \]
+\[ \widetilde{\epsilon^i} F = \epsilon^i \]
+
+From section \ref{linear_map_transforms}:
+\[ \widetilde{L} = B L F \]
+\[ L = F \widetilde{L} B \]
+
+From section \ref{einstein_notation}:
+
+For Contravariant (1,0)-Tensors:
+\[ \widetilde{\epsilon}^i = B^i_j \epsilon^j \]
+\[ \epsilon^i = F^i_j \widetilde{\epsilon^j} \]
+\[ \widetilde{v}^i = B^i_j v^j \]
+\[ v^i = F^i_j \widetilde{v^j} \]
+
+For Covariant (0,1)-Tensors:
+\[ \widetilde{\vec{e}_i} = F^j_i \vec{e}_j \]
+\[ \vec{e}_i = B^j_i \widetilde{\vec{e}_j} \]
+\[ \widetilde{\alpha_i} = F^j_i \alpha_j \]
+\[ \alpha_i = B^j_i \widetilde{\alpha_j} \]
+
+And for (1,1)-Tensors:
+\[ \widetilde{L^i_j} = B^i_k L^k_l F^l_j \]
+\[ L^i_j = F^i_k \widetilde{L^k_l} B^l_j \]
+
+From section \ref{metric_tensor}:
+\[ g_{ij} = \vec{e}_i \cdot \vec{e}_j \]
+
+From section \ref{length}
+\[ ||\vec{v}||^2 = v^i v^j g_{ij} \]
+
+From section \ref{dot}
+\[ \vec{v} \cdot \vec{w} =  v^i w^j g_{ij} \]
+
+From section \ref{angle}
+\[ \frac{v^i w^j g_{ij}}{\sqrt{v^a v^b g_{ab}} \sqrt{w^c w^d g_{cd}}} =  \cos(\theta) \]
+
+From section \ref{metric_tensor_transform}:
+The metric tensor is then said to be a (0,2)-Tensor because it transforms using
+two covariant rules.
+\[ \widetilde{g_{ij}} = F^k_i F^l_j g_{kl} \]
+\[ g_{ij} = B^k_i B^l_j \widetilde{g_{kl}} \]
+
+From the section \ref{general_tensor}
+\[
+  \widetilde{T^{abc\dots}_{xyz\dots}}
+  =
+  (B^a_i B^b_j B^c_k \dots) 
+  T^{ijk\dots}_{rst\dots}
+  (F^r_x F^s_y F^t_z \dots) 
+\]
+\[
+  T^{ijk\dots}_{rst\dots}
+  =
+  (F^i_a F^j_b F^k_c \dots) 
+  \widetilde{T^{abc\dots}_{xyz\dots}}
+  (B^x_r B^y_s B^z_t \dots) 
+\]
+
+\end{appendices}
 
 \bibliography{book}
 \bibliographystyle{ieeetr}
