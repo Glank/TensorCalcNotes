@@ -922,6 +922,11 @@ Now, notice that there are many ways to combine $Q$ and $D$. Some examples are,
 
 Which all result in different tensor results. So $Q(D)$ would be ambiguious.
 
+Note that $Q^i_{jk} D^{jk}$ differs from $Q^i_{jk} D^{kj}$  in that,
+\[ Q^i_{jk} D^{jk} = Q^i_{jk} D^{ab} \delta^j_a \delta^k_b \]
+But,
+\[ Q^i_{jk} D^{kj} = Q^i_{jk} D^{ab} \delta^j_b \delta^k_a \]
+
 \section{Tensor Product Spaces}
 
 Let ${\color{blue}T} \otimes {\color{red}S}$ be more compactly written ${\color{blue}T}{\color{red}S}$.
@@ -991,6 +996,8 @@ Now, we can express $f$ with the metric tensor $g$,
   &= g_{ij} v^i w^j \\
 \end{align*}
 
+So we can express $f$ as a tensor by simply leaving out it's input parameter and simplifying:
+
 \begin{align*}
   f &= g_{ij} \epsilon^i \epsilon^j (v^k \vec{e}_k) \\
   &= g_{ij} \epsilon^i (v^k \vec{e}_k) \epsilon^j \\
@@ -999,12 +1006,15 @@ Now, we can express $f$ with the metric tensor $g$,
   &= g_{ij} v^i \epsilon^j \\
 \end{align*}
 
-We denote,
+From dimensional analysis, we can see that $f$ is a (0,1)-tensor, i.e. a covector. So we can denote it as
+some linear combination of $\epsilon_j$. And, as we see from above, those coefficients are $g_{ij}v^j$. Therefore,
+we denote,
 \[ g_{ij}v^j = v_i \]
 
 So a vector can be written,
 \[ \vec{v} = v^j \vec{e}_j \]
-And it's paird covector can be written,
+
+And it's pairdd covector can be written,
 \[ \vec{v} \cdot \_ = v_i \epsilon^i \]
 
 Note that $v^i \ne v_i$ unless we're in an orthonormal coordinate system.
